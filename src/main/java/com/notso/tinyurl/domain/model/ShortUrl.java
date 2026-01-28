@@ -9,15 +9,19 @@ import java.util.UUID;
 
 
 @ToString
-@Getter
 @RequiredArgsConstructor
 public class ShortUrl {
 
+    @Getter
     private final UUID id;
     private final ShortCode shortCode;
+    @Getter
     private final OriginalUrl originalUrl;
+    @Getter
     private final LocalDateTime createdAt;
+    @Getter
     private LocalDateTime expiresAt;
+    @Getter
     private long clicks;
 
     private ShortUrl(UUID id, ShortCode shortCode, OriginalUrl originalUrl, LocalDateTime createdAt, LocalDateTime expiresAt, long clicks) {
@@ -95,6 +99,14 @@ public class ShortUrl {
 
     public String getOriginalDomain() {
         return originalUrl.getDomain();
+    }
+
+    public String getShortCodeValue() {
+        return shortCode.getValue();
+    }
+
+    public String getOriginalUrlValue() {
+        return originalUrl.getValue();
     }
 
     @Override

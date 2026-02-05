@@ -3,7 +3,9 @@ package com.notso.tinyurl.infrastructure.exception;
 import com.notso.tinyurl.domain.exception.InvalidUrlException;
 import com.notso.tinyurl.domain.exception.ShortUrlExpiredException;
 import com.notso.tinyurl.domain.exception.ShortUrlNotFoundException;
+import com.notso.tinyurl.interfaces.rest.dto.response.ApiErrorResponseDto;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,12 +14,36 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ApiErrorResponseDto> handleValidation(MethodArgumentNotValidException ex) {
+    log.warn("Validation failed: {}", ex.getMessage());
+
+    List<ApiErrorResponseDto.FieldError> fieldErrors =
+        ex.getBindingResult().getFieldErrors().stream()
+            .map(
+                error ->
+                    ApiErrorResponseDto.FieldError.builder()
+                        .field(error.getField())
+                        .message(error.getDefaultMessage())
+                        .build())
+            .toList();
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(
+            ApiErrorResponseDto.withFieldErrors(
+                HttpStatus.BAD_REQUEST.value(),
+                "VALIDATION_ERROR",
+                "Validation failed for one or more fields",
+                fieldErrors));
+  }
 
   @ExceptionHandler(ShortUrlNotFoundException.class)
   public ResponseEntity<ErrorResponse> handleNotFound(ShortUrlNotFoundException ex) {

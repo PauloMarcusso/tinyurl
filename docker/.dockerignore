@@ -1,0 +1,40 @@
+# .dockerignore
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+*.iml
+.vscode
+*.swp
+
+# Build Artifacts
+target/
+build/
+*.jar
+!docker/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose*.yml
+Dockerfile*
+
+# Docs
+*.md
+docs/
+
+# Tests
+src/test/
+
+# Local configs
+.env.local
+application-local.yml

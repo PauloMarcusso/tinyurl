@@ -1,0 +1,58 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: tinyurl-app
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE:-local}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: tinyurl
+      DB_USER: postgres
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      BASE_URL: ${BASE_URL:-http://localhost:8080}
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD","wget","--no-verbose","--tries=1","--spider","http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - tinyurl-network
+    restart: unless-stopped
+
+    # Database service using PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: tinyurl-postgres
+    environment:
+      POSTGRES_DB: tinyurl
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d tinyurl" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tinyurl-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  tinyurl-network:
+    driver: bridge
+

@@ -1,0 +1,38 @@
+services:
+  # Database service using PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: tinyurl-postgres
+    environment:
+      POSTGRES_DB: tinyurl
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d tinyurl" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tinyurl-network
+
+  # Adminer
+  adminer:
+    image: adminer:latest
+    container_name: tinyurl-adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - tinyurl-network
+
+volumes:
+  postgres_data:
+
+networks:
+  tinyurl-network:
+    driver: bridge

@@ -16,3 +16,5 @@ build/
 kvs.json
 .profileconfig.json
 .env
+
+terraform.tfvars

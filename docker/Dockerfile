@@ -14,7 +14,7 @@ RUN apk add --no-cache maven
 COPY pom.xml .
 
 # Download dependencies (cached if pom.xml hasn't changed)
-RUN mvn dependency:go-offline-B
+RUN mvn dependency:go-offline -B
 
 # Copy the entire source code
 COPY src ./src
@@ -53,7 +53,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
 ENV JAVA_OPTS="-XX:+UseContainerSupport \
                 -XX:MaxRAMPercentage=75.0 \
                 -XX:InitialRAMPercentage=50.0 \
-                -Djava.security.egd=file:/dev/./urandom \"
+                -Djava.security.egd=file:/dev/./urandom"
 
 # Entry point to run the application
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

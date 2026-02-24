@@ -44,7 +44,7 @@ public final class OriginalUrl {
             URL parsedUrl = uri.toURL();
 
             String protocol = parsedUrl.getProtocol().toLowerCase();
-            if (!ALLOWED_PROTOCOLS.contains(url)) {
+            if (!ALLOWED_PROTOCOLS.contains(protocol)) {
                 throw new IllegalArgumentException(String.format("Protocol '%s' is not allowed. Allowed protocols are: %s", protocol, ALLOWED_PROTOCOLS));
             }
 

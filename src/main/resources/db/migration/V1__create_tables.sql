@@ -1,5 +1,6 @@
-    id UUID PRIMARY KEY,
+
 CREATE TABLE short_urls (
+    id UUID PRIMARY KEY,
     short_code VARCHAR(10) NOT NULL,
     original_url TEXT NOT NULL,
     clicks BIGINT NOT NULL DEFAULT 0,
@@ -27,5 +28,4 @@ CONSTRAINT fk_short_url
 
 CREATE INDEX idx_url_accesses_short_url_id ON url_accesses(short_url_id);
 CREATE INDEX idx_url_accesses_accessed_at ON url_accesses(accessed_at);
-
 CREATE INDEX idx_url_accesses_url_date ON url_accesses(short_url_id, accessed_at);

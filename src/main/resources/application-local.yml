@@ -1,14 +1,19 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/urlshortener
+    url: jdbc:postgresql://localhost:5432/tinyurl
     username: postgres
     password: password
 
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: update
+      format_sql: true
+  flyway:
+    enabled: false
 
 app:
-    base-url: http://localhost:8080
+    base-url: http://localhost:8081
 
 logging:
   level:

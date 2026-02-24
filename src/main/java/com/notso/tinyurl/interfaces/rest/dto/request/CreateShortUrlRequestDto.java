@@ -1,5 +1,7 @@
 package com.notso.tinyurl.interfaces.rest.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -18,12 +20,13 @@ public class CreateShortUrlRequestDto {
 
   @NotBlank(message = "URL must not be blank")
   @Size(max = 2048, message = "URL must not exceed 2048 characters")
-  @Pattern(regexp = "ˆhttps?://.*", message = "URL must start with http:// or https://")
+  @Pattern(regexp = "^(http://|https://).*", message = "URL must start with http:// or https://")
   private String url;
 
   @Future(message = "Expiration date must be in the future")
   private LocalDateTime expiresAt;
 
+  @JsonProperty("custom_code")
   @Size(min = 6, max = 10, message = "Custom short code must be between 6 and 10 characters")
   @Pattern(
       regexp = "^[a-zA-Z0-9]*$",

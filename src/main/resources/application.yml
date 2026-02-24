@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8081}
 
 spring:
   application:
@@ -18,8 +18,10 @@ spring:
       connection-timeout: 20000
 
   jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
       show-sql: ${JPA_SHOW_SQL:false}
       properties:
         hibernate:
@@ -47,5 +49,6 @@ management:
 
 logging:
   level:
-    com.notso.tinyurl: ${LOG_LEVEL:INFO}
+    org.flywaydb: DEBUG
+    com.notso.tinyurl: DEBUG #${LOG_LEVEL:INFO}
     org.springframework.web: INFO

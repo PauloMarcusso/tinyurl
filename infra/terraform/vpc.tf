@@ -31,7 +31,7 @@ resource "aws_subnet" "public_1" {
 
 resource "aws_subnet" "public_2" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"
+  cidr_block              = "10.0.2.0/24"
   availability_zone       = "${var.aws_region}b"
   map_public_ip_on_launch = true
 
@@ -53,7 +53,7 @@ resource "aws_subnet" "private_1" {
 
 resource "aws_subnet" "private_2" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.10.0/24"
+  cidr_block        = "10.0.11.0/24"
   availability_zone = "${var.aws_region}b"
 
   tags = {
@@ -127,8 +127,8 @@ resource "aws_route_table_association" "private_1" {
 }
 
 resource "aws_route_table_association" "private_2" {
-  subnet_id = "aws_subnet.private_2.id"
-  route_table_id = "aws_route_table.private.id"
+  subnet_id = aws_subnet.private_2.id
+  route_table_id = aws_route_table.private.id
 }
 
 
